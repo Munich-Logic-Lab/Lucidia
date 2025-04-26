@@ -45,7 +45,7 @@ import {
 
 import { signOut, useSession } from "@/lib/auth/auth-client";
 
-import { DIcon } from "../icons";
+import { DIcon, DiceIcon } from "../icons";
 import Logo from "./logo";
 
 // Sample dream journal entries (replace with actual data)
@@ -153,13 +153,13 @@ export function AppSidebar() {
                       {dream.description}
                     </CardDescription>
                   </CardHeader>
-                  <CardFooter className="p-0 pt-3">
+                  <CardFooter className="flex justify-end p-0 pt-3">
                     <Button
                       variant="outline"
                       size="sm"
-                      className="w-full justify-center"
+                      className="justify-center"
                     >
-                      <FilmIcon className="size-4" />
+                      <DiceIcon className="mr-2 h-4 w-4" />
                       Tap to Create Video
                     </Button>
                   </CardFooter>
