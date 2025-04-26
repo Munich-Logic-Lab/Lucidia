@@ -133,7 +133,7 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* Dream Journal Entries (hidden when collapsed) */}
+        {/* Dream Journal Entries */}
         <SidebarGroup className="pt-8 group-data-[collapsible=icon]:hidden">
           <div
             className="absolute top-0 left-2 py-2 transition-opacity duration-200"
@@ -174,7 +174,7 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="p-4">
+      <SidebarFooter className="p-4 group-data-[collapsible=icon]:hidden">
         {session ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
