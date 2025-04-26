@@ -201,11 +201,11 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 0 0% 44%;
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 0 0% 44%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 0 0% 44%;
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
     --secondary: 210 40% 96.1%;
@@ -355,20 +355,20 @@
   body {
     @apply bg-background text-foreground;
   }
-  
+
   /* Sidebar collapsed styling */
   [data-collapsible="icon"] [data-sidebar="menu-button"] > span {
     opacity: 0;
     transition: opacity 0.2s;
   }
-  
+
   /* Hide and disable logo in collapsed state */
   [data-state="collapsed"] [data-sidebar="header"] a {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s;
   }
-  
+
   /* Hide custom sidebar label in collapsed state */
   [data-state="collapsed"] [data-sidebar-label] {
     opacity: 0;
