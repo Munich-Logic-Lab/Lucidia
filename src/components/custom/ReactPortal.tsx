@@ -26,9 +26,7 @@ const ReactPortal: React.FC<ReactPortalProps> = ({
   useEffect(() => {
     let isMounted = true;
     let element = document.getElementById(wrapperId);
-    if (!element) {
-      element = createWrapperAndAppendToBody(wrapperId);
-    }
+    element ??= createWrapperAndAppendToBody(wrapperId);
     if (isMounted) {
       setWrapperElement(element);
     }
