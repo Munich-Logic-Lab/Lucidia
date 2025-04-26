@@ -12,8 +12,8 @@ export function DreamSharing() {
       <div className="mb-3 flex items-center">
         <div className="flex items-center">
           <SIcon className="h-7 w-7 translate-y-[9px]" />
-          <h2 className="-ml-1 translate-x-[-4px] text-lg font-medium">
-            hare your dream image
+          <h2 className="-ml-1 translate-x-[-4px] text-[18px] leading-[23px] font-bold tracking-[1.53px]">
+            hare your dream
           </h2>
         </div>
       </div>
