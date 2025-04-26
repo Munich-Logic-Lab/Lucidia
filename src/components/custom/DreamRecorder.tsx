@@ -17,7 +17,7 @@ export function DreamRecorder() {
   return (
     <div className="flex h-full flex-col">
       <div className="mb-4 flex items-center">
-        <RIcon className="h-6 w-6 translate-y-[-4px] text-purple-600" />
+        <RIcon className="h-6 w-6 translate-y-[-4px]" />
         <h2 className="translate-x-[-4px] text-[18px] leading-[22px] font-normal tracking-[0.72px]">
           ecord your dream
         </h2>
@@ -34,7 +34,7 @@ export function DreamRecorder() {
 
       <div className="mx-auto mb-4 flex items-center justify-center">
         <button
-          className="flex h-16 w-16 items-center justify-center rounded-full bg-transparent transition-all duration-200 hover:opacity-80"
+          className="flex items-center justify-center rounded-full bg-transparent transition-all duration-200 hover:opacity-80"
           onClick={handleRecord}
         >
           <RecordbuttonIcon className="h-full w-full text-current" />
