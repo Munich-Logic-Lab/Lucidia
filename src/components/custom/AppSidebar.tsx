@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 
 import { AuthSignIn, AuthSignUp, Home as HomeRoute } from "@/routes";
 import {
-  FilmIcon,
   Home,
   LayoutDashboard,
   LogIn,
@@ -41,7 +40,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 
 import { signOut, useSession } from "@/lib/auth/auth-client";
