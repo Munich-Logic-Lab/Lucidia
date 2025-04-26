@@ -79,35 +79,38 @@ export default function SignUp() {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              {["name", "email", "password", "confirmPassword"].map((field) => (
-                <FormField
-                  control={form.control}
-                  key={field}
-                  name={field as keyof z.infer<typeof signUpSchema>}
-                  render={({ field: fieldProps }) => (
-                    <FormItem>
-                      <FormLabel>
-                        {field.charAt(0).toUpperCase() + field.slice(1)}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type={
-                            field.includes("password")
-                              ? "password"
-                              : field === "email"
-                                ? "email"
-                                : "text"
-                          }
-                          placeholder={`Enter your ${field}`}
-                          {...fieldProps}
-                          autoComplete="off"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              ))}
+              {["name", "email", "password", "confirm password"].map(
+                (field) => (
+                  <FormField
+                    control={form.control}
+                    key={field}
+                    name={field as keyof z.infer<typeof signUpSchema>}
+                    render={({ field: fieldProps }) => (
+                      <FormItem>
+                        <FormLabel>
+                          {field.charAt(0).toUpperCase() + field.slice(1)}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type={
+                              field === "password" ||
+                              field === "confirmPassword"
+                                ? "password"
+                                : field === "email"
+                                  ? "email"
+                                  : "text"
+                            }
+                            placeholder={`Enter your ${field}`}
+                            {...fieldProps}
+                            autoComplete="off"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                ),
+              )}
 
               <Button className="w-full" disabled={pending}>
                 Sign up
