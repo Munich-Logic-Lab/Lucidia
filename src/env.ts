@@ -20,6 +20,9 @@ const env = createEnv({
     GITHUB_CLIENT_ID: z.string(),
     GITHUB_CLIENT_SECRET: z.string(),
     EMAIL_VERIFICATION_CALLBACK_URL: z.string(),
+
+    BLOB_READ_WRITE_TOKEN: z.string(),
+    OPENAI_API_KEY: z.string(),
   },
 
   /**
@@ -52,6 +55,9 @@ const env = createEnv({
     MAIL_USERNAME: process.env.MAIL_USERNAME,
     MAIL_PASSWORD: process.env.MAIL_PASSWORD,
     MAIL_FROM: process.env.MAIL_FROM,
+
+    BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
