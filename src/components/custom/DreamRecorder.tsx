@@ -18,7 +18,9 @@ export function DreamRecorder() {
     <div className="flex h-full flex-col">
       <div className="mb-4 flex items-center">
         <RIcon className="h-6 w-6 text-purple-600" />
-        <h2 className="text-lg font-medium">ecord your dream</h2>
+        <h2 className="text-[18px] leading-[22px] font-normal tracking-[0.72px]">
+          ecord your dream
+        </h2>
       </div>
 
       <div className="mb-6 grow">
