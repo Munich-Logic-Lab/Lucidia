@@ -355,4 +355,22 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Sidebar collapsed styling */
+  [data-collapsible="icon"] [data-sidebar="menu-button"] > span {
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  
+  /* Hide and disable logo in collapsed state */
+  [data-state="collapsed"] [data-sidebar="header"] a {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  
+  /* Hide custom sidebar label in collapsed state */
+  [data-state="collapsed"] [data-sidebar-label] {
+    opacity: 0;
+  }
 }

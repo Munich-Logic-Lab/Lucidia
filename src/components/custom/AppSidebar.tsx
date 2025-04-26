@@ -68,15 +68,23 @@ export function AppSidebar() {
   const { data: session } = useSession();
 
   return (
-    <Sidebar>
-      <SidebarHeader className="p-4">
+    <Sidebar collapsible="icon">
+      <SidebarHeader className="p-3">
         <HomeRoute.Link>
-          <Logo className="h-8 w-auto" />
+          <Logo className="h-6 w-auto" />
         </HomeRoute.Link>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+        <SidebarGroup className="pt-10">
+          {/* We use an absolute positioned label that doesn't affect layout */}
+          <div
+            className="absolute top-0 left-2 py-2 transition-opacity duration-200"
+            data-sidebar-label
+          >
+            <span className="text-sidebar-foreground/70 text-xs font-medium">
+              Navigation
+            </span>
+          </div>
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map((item) => (
