@@ -38,6 +38,7 @@ import {
 
 import { signOut, useSession } from "@/lib/auth/auth-client";
 
+import { VoiceRecordButton } from "./VoiceRecordButton";
 import Logo from "./logo";
 
 const navItems = [
@@ -75,7 +76,10 @@ export function AppSidebar() {
         </HomeRoute.Link>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup className="pt-10">
+        <div className="my-4 px-3">
+          <VoiceRecordButton />
+        </div>
+        <SidebarGroup className="pt-4">
           {/* We use an absolute positioned label that doesn't affect layout */}
           <div
             className="absolute top-0 left-2 py-2 transition-opacity duration-200"

@@ -12,3 +12,4 @@ pnpm i
 ## Notices
 
 - deactivated the mendatory email confirmation for signup, so you can log in without confirming your email (so we don't have to setup an email provider)
+- uses `@svgr/cli` to turn the svg icons into importable components
