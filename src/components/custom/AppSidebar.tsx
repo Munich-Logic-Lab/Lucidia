@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 
 import { AuthSignIn, AuthSignUp, Home as HomeRoute } from "@/routes";
 import {
+  FilmIcon,
   Home,
   LayoutDashboard,
   LogIn,
@@ -15,6 +16,13 @@ import {
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,7 +37,6 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -38,8 +45,32 @@ import {
 
 import { signOut, useSession } from "@/lib/auth/auth-client";
 
-import { VoiceRecordButton } from "./VoiceRecordButton";
 import Logo from "./logo";
+
+// Sample dream journal entries (replace with actual data)
+const dreamEntries = [
+  {
+    id: 1,
+    title: "Flying Over Mountains",
+    description: "I was soaring above snow-capped peaks with eagles...",
+  },
+  {
+    id: 2,
+    title: "Lost in the Forest",
+    description: "Wandering through an ancient forest with glowing trees...",
+  },
+  {
+    id: 3,
+    title: "Ocean Adventure",
+    description:
+      "Swimming with colorful fish and discovering underwater cities...",
+  },
+  {
+    id: 4,
+    title: "Space Journey",
+    description: "Visiting distant planets and meeting strange beings...",
+  },
+];
 
 const navItems = [
   {
@@ -70,15 +101,12 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="p-3">
+      <SidebarHeader className="p-6">
         <HomeRoute.Link>
           <Logo className="h-6 w-auto" />
         </HomeRoute.Link>
       </SidebarHeader>
       <SidebarContent>
-        <div className="my-4 px-3">
-          <VoiceRecordButton />
-        </div>
         <SidebarGroup className="pt-4">
           {/* We use an absolute positioned label that doesn't affect layout */}
           <div
@@ -102,6 +130,47 @@ export function AppSidebar() {
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Dream Journal Entries (hidden when collapsed) */}
+        <SidebarGroup className="pt-8 group-data-[collapsible=icon]:hidden">
+          <div
+            className="absolute top-0 left-2 py-2 transition-opacity duration-200"
+            data-sidebar-label
+          >
+            <span className="text-sidebar-foreground/70 text-xs font-medium">
+              Dream Journal
+            </span>
+          </div>
+          <SidebarGroupContent>
+            <div className="max-h-[60vh] space-y-4 overflow-y-auto px-3 py-2">
+              {dreamEntries.map((dream) => (
+                <Card
+                  key={dream.id}
+                  className="bg-muted/30 rounded-2xl p-4 shadow-md transition-all hover:translate-y-[-2px] hover:shadow-lg"
+                >
+                  <CardHeader className="p-0">
+                    <CardTitle className="text-lg font-bold">
+                      {dream.title}
+                    </CardTitle>
+                    <CardDescription className="text-muted-foreground text-sm">
+                      {dream.description}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardFooter className="p-0 pt-3">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full justify-center"
+                    >
+                      <FilmIcon className="size-4" />
+                      Tap to Create Video
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ))}
+            </div>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
