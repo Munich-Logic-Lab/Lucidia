@@ -104,7 +104,7 @@ export function AppSidebar() {
   const { data: session } = useSession();
 
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="icon" className="px-2">
       <SidebarHeader className="relative p-6">
         <HomeRoute.Link
           className={cn("absolute top-1/2 left-2", !open && "hidden")}
