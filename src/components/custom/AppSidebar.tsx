@@ -114,7 +114,7 @@ export function AppSidebar() {
         <CustomSidebarTrigger />
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup className="pt-4">
+        <SidebarGroup className="h-full pt-4">
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map((item) => (
