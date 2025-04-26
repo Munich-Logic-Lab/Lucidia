@@ -45,6 +45,7 @@ import {
 
 import { signOut, useSession } from "@/lib/auth/auth-client";
 
+import { DIcon } from "../icons";
 import Logo from "./logo";
 
 // Sample dream journal entries (replace with actual data)
@@ -139,9 +140,12 @@ export function AppSidebar() {
             className="absolute top-0 left-2 py-2 transition-opacity duration-200"
             data-sidebar-label
           >
-            <span className="text-sidebar-foreground/70 text-xs font-medium">
-              Dream Journal
-            </span>
+            <div className="flex items-center">
+              <DIcon className="h-7 w-7 translate-x-[8px]" />
+              <h2 className="text-sidebar-foreground/70 text-[18px] leading-[22px] font-normal tracking-[0.72px]">
+                ream journal
+              </h2>
+            </div>
           </div>
           <SidebarGroupContent>
             <div className="max-h-[60vh] space-y-4 overflow-y-auto px-3 py-2">
