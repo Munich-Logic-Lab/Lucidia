@@ -16,6 +16,13 @@ export const auth = betterAuth({
   }),
 
   plugins: [openAPI(), admin(), nextCookies()], //nextCookies() should be last plugin in the list
+
+  events: {
+    async onUserCreate({ user, db }) {
+      // Automatically mark users as email verified when they are created
+      await db.updateUser(user.id, { emailVerified: true });
+    },
+  },
   session: {
     expiresIn: 60 * 60 * 24 * 7, // 7 days
     updateAge: 60 * 60 * 24, // 1 day (every 1 day the session expiration is updated)
@@ -53,7 +60,7 @@ export const auth = betterAuth({
 
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: true,
+    requireEmailVerification: false,
     sendResetPassword: async ({ user, url }) => {
       await sendMail({
         to: user.email,
@@ -63,7 +70,7 @@ export const auth = betterAuth({
     },
   },
   emailVerification: {
-    sendOnSignUp: true,
+    sendOnSignUp: false,
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, token }) => {
       const verificationUrl = `${env.BETTER_AUTH_URL}/api/auth/verify-email?token=${token}&callbackURL=${env.EMAIL_VERIFICATION_CALLBACK_URL}`;
