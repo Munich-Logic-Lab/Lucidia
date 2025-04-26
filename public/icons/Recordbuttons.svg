@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="123" height="123" viewBox="0 0 123 123">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.239" y1="0.096" x2="0.5" y2="0.7" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#e68c78"/>
+      <stop offset="1" stop-color="#872488"/>
+    </linearGradient>
+    <filter id="Ellipse_1" x="0" y="0" width="123" height="123" filterUnits="userSpaceOnUse">
+      <feOffset dy="8" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feFlood flood-opacity="0.329"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Recordbuttons" transform="translate(20 12)">
+    <g id="Group_13" data-name="Group 13" transform="translate(3.928 3.928)">
+      <g id="Group_2" data-name="Group 2" transform="translate(0)">
+        <g transform="matrix(1, 0, 0, 1, -23.93, -15.93)" filter="url(#Ellipse_1)">
+          <g id="Ellipse_1-2" data-name="Ellipse 1" transform="translate(24 16)" stroke="#c19e9e" stroke-width="0.5" opacity="0.488" fill="url(#linear-gradient)">
+            <circle cx="37.5" cy="37.5" r="37.5" stroke="none"/>
+            <circle cx="37.5" cy="37.5" r="37.25" fill="none"/>
+          </g>
+        </g>
+      </g>
+      <g id="Group_7" data-name="Group 7" transform="translate(27 20.694)">
+        <g id="microphone" transform="translate(0)">
+          <g id="Group_4" data-name="Group 4" transform="translate(0 15.719)">
+            <g id="Group_3" data-name="Group 3">
+              <path id="Path_1" data-name="Path 1" d="M99.625,210.6a1.174,1.174,0,1,0-2.348,0,8.3,8.3,0,1,1-16.593,0,1.174,1.174,0,1,0-2.348,0,10.757,10.757,0,0,0,9.47,10.782v3.183H83.541a1.194,1.194,0,0,0,0,2.387H94.42a1.194,1.194,0,0,0,0-2.387H90.154v-3.183A10.757,10.757,0,0,0,99.625,210.6Z" transform="translate(-78.336 -209.408)" fill="#343434"/>
+            </g>
+          </g>
+          <g id="Group_6" data-name="Group 6" transform="translate(4)">
+            <g id="Group_5" data-name="Group 5" transform="translate(0)">
+              <path id="Path_2" data-name="Path 2" d="M138.74,0A6.656,6.656,0,0,0,132.1,6.644V17.426a6.644,6.644,0,1,0,13.288.04V6.644A6.656,6.656,0,0,0,138.74,0Z" transform="translate(-132.096)" fill="#343434"/>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+    <rect id="Rectangle_13" data-name="Rectangle 13" width="82" height="82" fill="none"/>
+  </g>
+</svg>
