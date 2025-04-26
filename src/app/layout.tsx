@@ -35,10 +35,7 @@ export default async function RootLayout({
               <div className="flex">
                 <AppSidebar />
                 <main className="w-3/4 flex-grow">
-                  <div className="flex items-center border-b p-4">
-                    <SidebarTrigger />
-                  </div>
-                  <div className="prose-base w-full py-3">{children}</div>
+                  <div className="prose-base w-full">{children}</div>
                 </main>
                 <DreamSidebar />
               </div>
