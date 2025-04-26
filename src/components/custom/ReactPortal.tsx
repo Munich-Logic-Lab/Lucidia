@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
-
-
 function createWrapperAndAppendToBody(wrapperId: string): HTMLElement {
   const wrapperElement = document.createElement("div");
   wrapperElement.setAttribute("id", wrapperId);
