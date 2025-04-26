@@ -145,7 +145,7 @@ export function AppSidebar() {
             </div>
           </div>
           <SidebarGroupContent>
-            <div className="max-h-[60vh] space-y-4 overflow-y-auto px-3 py-2">
+            <div className="mt-2 max-h-[60vh] space-y-4 overflow-y-auto px-3 py-2">
               {dreamEntries.map((dream) => (
                 <Card
                   key={dream.id}
