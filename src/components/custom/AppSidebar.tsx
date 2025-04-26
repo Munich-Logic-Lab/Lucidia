@@ -41,11 +41,14 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
 
 import { signOut, useSession } from "@/lib/auth/auth-client";
+import { cn } from "@/lib/utils";
 
 import { DIcon, DiceIcon } from "../icons";
+import { CustomSidebarTrigger } from "./CustomSidebarTrigger";
 import Logo from "./logo";
 
 // Sample dream journal entries (replace with actual data)
@@ -102,10 +105,15 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="p-6">
-        <HomeRoute.Link>
+      <SidebarHeader className="relative p-6">
+        <HomeRoute.Link
+          className={cn("absolute top-1/2 left-2", !open && "hidden")}
+        >
           <Logo className="h-6 w-auto" />
         </HomeRoute.Link>
+
+        {/* Use the custom trigger instead */}
+        <CustomSidebarTrigger />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup className="pt-4">
