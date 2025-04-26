@@ -109,15 +109,6 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup className="pt-4">
-          {/* We use an absolute positioned label that doesn't affect layout */}
-          <div
-            className="absolute top-0 left-2 py-2 transition-opacity duration-200"
-            data-sidebar-label
-          >
-            <span className="text-sidebar-foreground/70 text-xs font-medium">
-              Navigation
-            </span>
-          </div>
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map((item) => (
