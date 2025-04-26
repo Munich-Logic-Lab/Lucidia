@@ -11,7 +11,7 @@ export function DreamSharing() {
     <div className="flex h-full flex-col">
       <div className="mb-3 flex items-center">
         <div className="flex items-center">
-          <SIcon className="h-7 w-7 translate-y-[9px] text-purple-600" />
+          <SIcon className="h-7 w-7 translate-y-[9px]" />
           <h2 className="-ml-1 translate-x-[-4px] text-lg font-medium">
             hare your dream image
           </h2>
