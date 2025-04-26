@@ -17,8 +17,8 @@ export function DreamRecorder() {
   return (
     <div className="flex h-full flex-col">
       <div className="mb-4 flex items-center">
-        <RIcon className="h-6 w-6 text-purple-600" />
-        <h2 className="text-[18px] leading-[22px] font-normal tracking-[0.72px]">
+        <RIcon className="h-6 w-6 translate-y-[-4px] text-purple-600" />
+        <h2 className="translate-x-[-4px] text-[18px] leading-[22px] font-normal tracking-[0.72px]">
           ecord your dream
         </h2>
       </div>
