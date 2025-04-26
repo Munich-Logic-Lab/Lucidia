@@ -1,6 +1,7 @@
 import * as React from "react";
+import type { SVGProps } from "react";
 
-const SvgRecordbutton = (props) => (
+const SvgRecordbutton = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={123} height={123} {...props}>
     <defs>
       <linearGradient
