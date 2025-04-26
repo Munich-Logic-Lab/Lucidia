@@ -1,9 +1,14 @@
+"use client";
+
 import Link from "next/link";
 import React from "react";
 
 import { SiGithub } from "@icons-pack/react-simple-icons";
 
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+import { useSession } from "@/lib/auth/auth-client";
 
 const TechBadge = ({ label }: { label: string }) => (
   <div className="rounded-full bg-zinc-50 px-4 py-2 text-sm text-zinc-600 transition-colors hover:bg-zinc-100">
@@ -12,6 +17,10 @@ const TechBadge = ({ label }: { label: string }) => (
 );
 
 export default function Home() {
+  const { data: session } = useSession();
+  // Type assertion to handle the role property
+  const isAdmin = session?.user && (session.user as any).role === "admin";
+
   const technologies = {
     core: ["Next.js 15", "TypeScript 5", "React 19", "Tailwind CSS 3"],
     ecosystem: ["Drizzle ORM", "React Query 5", "PostgreSQL", "Radix UI"],
@@ -19,11 +28,51 @@ export default function Home() {
     ui: ["Shadcn/Ui", "Simple Icons", "Lucide Icons"],
   };
 
+  const renderUserContent = () => {
+    if (!session) return null;
+
+    return (
+      <div className="mb-16">
+        <Card className="bg-gradient-to-br from-zinc-50 to-zinc-100">
+          <CardHeader>
+            <CardTitle>
+              {isAdmin
+                ? "Admin Dashboard"
+                : `Welcome, ${session.user.name || "User"}`}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {isAdmin ? (
+              <div>
+                <h2 className="mb-4 text-lg font-medium">Admin Dashboard</h2>
+                <p className="text-zinc-600">
+                  You have admin privileges. Here you can manage the application
+                  and users.
+                </p>
+              </div>
+            ) : (
+              <div>
+                <h2 className="mb-4 text-lg font-medium">User Dashboard</h2>
+                <p className="text-zinc-600">
+                  Welcome to your dashboard. Here you can manage your account
+                  and access your content.
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Main content */}
       <div className="container mx-auto max-w-5xl px-4">
-        <main className="pt-32 pb-20">
+        <main className="pt-12 pb-20">
+          {/* User or Admin Dashboard when logged in */}
+          {renderUserContent()}
+
           {/* Hero */}
           <div className="max-w-3xl space-y-8">
             <h1 className="text-4xl leading-tight font-light text-black sm:text-5xl">

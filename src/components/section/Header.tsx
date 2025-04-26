@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import { AuthSignIn, AuthSignUp, DashboardAdmin, Home } from "@/routes";
+import { AuthSignIn, AuthSignUp, Home } from "@/routes";
 
 import {
   DropdownMenu,
@@ -45,7 +45,7 @@ export default function Header() {
                   <DropdownMenuLabel>{session.user.name}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className="cursor-pointer">
-                    <DashboardAdmin.Link>DashBoard</DashboardAdmin.Link>
+                    <Home.Link>Home</Home.Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     className="cursor-pointer"

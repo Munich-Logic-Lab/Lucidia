@@ -18,7 +18,13 @@ export const auth = betterAuth({
   plugins: [openAPI(), admin(), nextCookies()], //nextCookies() should be last plugin in the list
 
   events: {
-    async onUserCreate({ user, db }) {
+    async onUserCreate({
+      user,
+      db,
+    }: {
+      user: { id: string };
+      db: { updateUser: (id: string, data: any) => Promise<any> };
+    }) {
       // Automatically mark users as email verified when they are created
       await db.updateUser(user.id, { emailVerified: true });
     },
