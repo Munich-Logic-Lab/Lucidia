@@ -6,9 +6,9 @@ import { DreamSharing } from "@/components/custom/DreamSharing";
 
 export default function Home() {
   return (
-    <div className="h-screen overflow-hidden bg-white">
+    <div className="h-full min-h-[calc(100vh-8rem)] bg-white">
       {/* Main content */}
-      <div className="container mx-auto h-full max-w-5xl px-4">
+      <div className="h-full w-full px-4">
         <main className="flex h-full flex-col py-8">
           {/* Dream sharing section */}
           <DreamSharing />

@@ -8,7 +8,7 @@ import { DreamAvatarGroup } from "./DreamAvatarGroup";
 
 export function DreamSharing() {
   return (
-    <div className="mb-6">
+    <div className="flex h-full flex-col">
       <div className="mb-3 flex items-center">
         <div className="flex items-center">
           <SIcon className="h-7 w-7 translate-y-[9px] text-purple-600" />
@@ -19,13 +19,13 @@ export function DreamSharing() {
       </div>
       <DreamAvatarGroup />
 
-      <div className="relative mt-4">
+      <div className="relative mt-4 h-full">
         <Image
           src="/images/77627641.jpg"
           alt="Dream visualization"
-          width={800}
-          height={400}
-          className="h-[400px] w-full rounded-md object-cover"
+          width={1200}
+          height={800}
+          className="h-[600px] w-full rounded-md object-cover"
         />
         <div className="absolute right-0 bottom-4 left-0 flex justify-center gap-4">
           <button className="rounded-full bg-white/80 p-2 shadow-md">
