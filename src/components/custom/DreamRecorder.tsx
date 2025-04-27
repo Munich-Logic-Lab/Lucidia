@@ -2,10 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { Mic, MicOff, Send } from "lucide-react";
-import { toast } from "sonner";
-
-import { RIcon } from "@/components/icons";
+import { RIcon, RecordbuttonIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -61,10 +58,6 @@ export function DreamRecorder() {
     if (!isConnected) {
       try {
         setIsProcessing(true);
-        toast("Connecting to dream interpreter...", {
-          description:
-            "This may take a moment. You can start speaking when connected.",
-        });
 
         await connect({
           instructions: INSTRUCTIONS,
@@ -73,16 +66,8 @@ export function DreamRecorder() {
 
         setIsProcessing(false);
         setIsRecording(true);
-        toast("Connected", {
-          description:
-            "You can now speak about your dream. The AI will respond automatically.",
-        });
       } catch (error) {
         console.error("Connection error:", error);
-        toast.error("Connection failed", {
-          description:
-            "Could not connect to dream interpreter. Please try again.",
-        });
         setIsProcessing(false);
       }
       return;
@@ -91,16 +76,6 @@ export function DreamRecorder() {
     // If already connected, toggle mute
     const newMuteState = toggleMute();
     setIsRecording(!newMuteState);
-
-    if (newMuteState) {
-      toast("Paused recording", {
-        description: "Click the microphone again to continue.",
-      });
-    } else {
-      toast("Recording resumed", {
-        description: "You can speak now.",
-      });
-    }
   };
 
   const handleSendText = async () => {
@@ -125,9 +100,6 @@ export function DreamRecorder() {
       await sendMessage(dreamText);
     } catch (error) {
       console.error("Failed to send message:", error);
-      toast.error("Failed to send message", {
-        description: "Please try again.",
-      });
       setIsProcessing(false);
     }
   };
@@ -138,9 +110,6 @@ export function DreamRecorder() {
     setIsRecording(false);
     setIsConnected(false);
     setAiResponse("");
-    toast("Disconnected", {
-      description: "Dream interpretation session ended.",
-    });
   };
 
   return (
@@ -184,19 +153,16 @@ export function DreamRecorder() {
         </div>
       )}
 
-      <div className="mb-4 flex items-center justify-center gap-2">
-        <Button
-          className={`rounded-full p-3 ${isRecording ? "bg-red-500 hover:bg-red-600" : "bg-purple-500 hover:bg-purple-600"}`}
+      <div className="flex items-center justify-center gap-2">
+        <button
           onClick={handleMicrophoneToggle}
           disabled={isProcessing}
           aria-label={isRecording ? "Pause recording" : "Start recording"}
         >
-          {isRecording ? (
-            <MicOff className="h-6 w-6" />
-          ) : (
-            <Mic className="h-6 w-6" />
-          )}
-        </Button>
+          <RecordbuttonIcon className="hover:red-100" />
+        </button>
+        {/* TODO: text deactivated for now */}
+        {/*
         <Button
           className="rounded-md bg-blue-500 px-4 py-2 hover:bg-blue-600"
           onClick={handleSendText}
@@ -205,6 +171,7 @@ export function DreamRecorder() {
           <Send className="mr-1 h-5 w-5" />
           Interpret Dream
         </Button>
+        */}
       </div>
 
       <div className="text-muted-foreground text-center text-sm">
