@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Loader, Play, Square } from "lucide-react";
 
@@ -28,6 +28,75 @@ export function DreamSharing() {
     }, 3000);
   };
 
+  // Listen for dream image generation events
+  useEffect(() => {
+    const handleDreamImageGenerated = (event: CustomEvent) => {
+      const { imageUrl } = event.detail;
+      if (imageUrl) {
+        setDreamViz(imageUrl);
+        setIsGenerating(false);
+      }
+    };
+
+    const handleImageGenerationStart = () => {
+      setIsGenerating(true);
+    };
+
+    const handleImageGenerationEnd = () => {
+      setIsGenerating(false);
+    };
+
+    const handleImageReset = () => {
+      // Reset the image when starting a new session
+      setDreamViz(undefined);
+      setIsGenerating(false);
+    };
+
+    // Add event listeners
+    window.addEventListener(
+      "dreamImageGenerated",
+      handleDreamImageGenerated as EventListener,
+    );
+
+    window.addEventListener(
+      "dreamImageGenerationStart",
+      handleImageGenerationStart as EventListener,
+    );
+
+    window.addEventListener(
+      "dreamImageGenerationEnd",
+      handleImageGenerationEnd as EventListener,
+    );
+
+    window.addEventListener(
+      "dreamImageReset",
+      handleImageReset as EventListener,
+    );
+
+    // Clean up
+    return () => {
+      window.removeEventListener(
+        "dreamImageGenerated",
+        handleDreamImageGenerated as EventListener,
+      );
+
+      window.removeEventListener(
+        "dreamImageGenerationStart",
+        handleImageGenerationStart as EventListener,
+      );
+
+      window.removeEventListener(
+        "dreamImageGenerationEnd",
+        handleImageGenerationEnd as EventListener,
+      );
+
+      window.removeEventListener(
+        "dreamImageReset",
+        handleImageReset as EventListener,
+      );
+    };
+  }, []);
+
   const handlePlayPause = () => {
     setIsPlaying(!isPlaying);
   };
@@ -51,16 +120,37 @@ export function DreamSharing() {
               src={dreamViz || "/images/placeholder-dream.png"}
               alt="Dream visualization"
               fill={true}
-              className="rounded-md object-cover"
+              className={`rounded-md object-cover ${isGenerating ? "opacity-50" : ""}`}
             />
-            {!dreamViz && (
-              <div className="absolute inset-0 mt-12 flex flex-col items-center justify-center text-white">
+
+            {isGenerating && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <div className="h-16 w-16 animate-spin rounded-full border-4 border-purple-500 border-t-transparent"></div>
+                <p className="mt-4 text-center text-lg font-medium text-white">
+                  Generating your dream image...
+                </p>
+              </div>
+            )}
+
+            {!dreamViz && !isGenerating && (
+              <div className="absolute inset-0 mt-8 flex flex-col items-center justify-center px-4 text-white">
                 <p className="text-center text-xl font-medium">
                   Start talking about your dream
                 </p>
                 <p className="mt-2 text-center">
-                  We'll visualize it for you after you share your experience
+                  We'll create an image based on the scene you describe
                 </p>
+                <div className="mt-6 max-w-md rounded-lg bg-black/40 p-4">
+                  <h3 className="mb-2 text-lg font-medium">How it works:</h3>
+                  <ol className="list-decimal space-y-2 pl-5">
+                    <li>Click the record button and describe your dream</li>
+                    <li>Answer a few questions about visual details</li>
+                    <li>
+                      The AI will create a text prompt for image generation
+                    </li>
+                    <li>An image of your dream scene will appear here</li>
+                  </ol>
+                </div>
               </div>
             )}
             {/*

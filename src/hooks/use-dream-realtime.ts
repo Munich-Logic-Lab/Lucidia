@@ -137,23 +137,63 @@ export function useDreamRealtime() {
         // Handle incoming messages
         dc.addEventListener("message", (e) => {
           try {
+            console.log("Raw WebRTC message received:", e.data);
             const eventData = JSON.parse(e.data);
-            console.log("Received event:", eventData);
+            console.log("Parsed WebRTC event:", eventData);
 
             // Handle transcription updates
             if (
-              eventData.type === "conversation.item.input_audio_transcription"
+              eventData.type ===
+                "conversation.item.input_audio_transcription" ||
+              eventData.type ===
+                "conversation.item.input_audio_transcription.completed"
             ) {
-              setTranscription(eventData.content.text);
+              if (eventData.transcript) {
+                setTranscription(eventData.transcript);
+              } else if (eventData.content?.text) {
+                setTranscription(eventData.content.text);
+              } else if (eventData.delta) {
+                setTranscription((prev) => prev + eventData.delta);
+              }
             }
 
-            // Handle AI responses
+            // Handle AI responses based on response.done events
+            if (eventData.type === "response.done" && eventData.response) {
+              const responseOutput = eventData.response.output;
+
+              if (Array.isArray(responseOutput) && responseOutput.length > 0) {
+                const assistantItems = responseOutput.filter(
+                  (item) =>
+                    item.role === "assistant" &&
+                    item.content &&
+                    Array.isArray(item.content) &&
+                    item.content.length > 0,
+                );
+
+                for (const item of assistantItems) {
+                  const transcripts = item.content
+                    .filter((c: any) => c.type === "audio" && c.transcript)
+                    .map((c: any) => c.transcript);
+
+                  if (transcripts.length > 0) {
+                    const fullMessage = transcripts.join("\n");
+                    console.log(
+                      "Found complete assistant message:",
+                      fullMessage,
+                    );
+                    setAiMessage(fullMessage);
+                  }
+                }
+              }
+            }
+
+            // Handle individual audio transcripts for ongoing messages
             if (
-              eventData.role === "assistant" &&
-              eventData.content &&
-              eventData.content.trim()
+              eventData.type === "response.audio_transcript.done" &&
+              eventData.transcript
             ) {
-              setAiMessage(eventData.content);
+              console.log("Received audio transcript:", eventData.transcript);
+              setAiMessage(eventData.transcript);
             }
           } catch (error) {
             console.error("Error processing message:", error);
