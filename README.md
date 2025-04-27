@@ -39,10 +39,8 @@ Lucidia is an expressive journaling and visualization platform that transforms v
 Lucidia/
 ├── server/             # Flask backend for handling API requests
 ├── web/                # Next.js frontend application
-├── README.md           # Project documentation
-└── requirements.txt    # Python dependencies
+└── README.md           # Project documentation
 ```
-
 
 ---
 
@@ -63,7 +61,6 @@ Lucidia/
    cd Lucidia
    ```
 
-
 2. **Set Up Backend**:
 
    ```bash
@@ -73,7 +70,6 @@ Lucidia/
    pip install -r requirements.txt
    ```
 
-
 3. **Configure Environment Variables**:
 
    Create a `.env` file in the `server/` directory with your OpenAI API key:
@@ -82,13 +78,11 @@ Lucidia/
    OPENAI_API_KEY=your_openai_api_key
    ```
 
-
 4. **Run Backend Server**:
 
    ```bash
    flask run
    ```
-
 
 5. **Set Up Frontend**:
 
@@ -97,7 +91,6 @@ Lucidia/
    npm install
    npm run dev
    ```
-
 
 6. **Access the Application**:
 
