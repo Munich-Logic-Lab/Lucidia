@@ -279,7 +279,7 @@ export function DreamSharing() {
                     <li>Answer a few questions about visual details</li>
                     <li>The AI will create a text prompt for visualization</li>
                     <li>An image of your dream scene will appear here</li>
-                    <li>A 3D model will be generated for download</li>
+                    <li>A 3D model will be generated to visualize the dream</li>
                   </ol>
                 </div>
               </div>
