@@ -2,4 +2,5 @@ plys
 images
 metadata
 storage
+__pycache__
 .env
