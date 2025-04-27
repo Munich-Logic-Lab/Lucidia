@@ -140,7 +140,7 @@ export function DreamSharing() {
           </div>
           <DreamAvatarGroup />
 
-          <div className="relative h-full">
+          <div className="relative h-full min-h-[500px]">
             <Image
               src={dreamViz || "/images/placeholder-dream.png"}
               alt="Dream visualization"
