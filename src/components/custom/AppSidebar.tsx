@@ -105,7 +105,10 @@ export function AppSidebar() {
     <Sidebar collapsible="icon" className="px-2">
       <SidebarHeader className="relative p-6">
         <HomeRoute.Link
-          className={cn("absolute top-1/2 left-2", !open && "hidden")}
+          className={cn(
+            "absolute top-1/2 left-2",
+            "data-[state=closed]:hidden",
+          )}
         >
           <Logo className="h-6 w-auto" />
         </HomeRoute.Link>
@@ -165,7 +168,7 @@ export function AppSidebar() {
                       size="sm"
                       className="justify-center"
                     >
-                      <DiceIcon className="mr-2 h-4 w-4" />
+                      <DiceIcon className="h-4 w-4" />
                       Tap to Create Video
                     </Button>
                   </CardFooter>
