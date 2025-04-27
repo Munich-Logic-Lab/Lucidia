@@ -1,7 +1,3 @@
-Here's a comprehensive technical README for your Lucidia project, incorporating all the components you mentioned:
-
----
-
 # Lucidia
 
 Lucidia is an expressive journaling and visualization platform that transforms voice-recorded dreams into immersive 3D scenes. Designed for children with communication challenges, adults exploring their subconscious, and researchers lacking labeled visual dream datasets, Lucidia bridges the gap between imagination and visualization.
