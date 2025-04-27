@@ -122,5 +122,3 @@ We welcome contributions from the community. If you're interested in contributin
 For questions or collaborations, please reach out to the [Munich Logic Lab](https://github.com/Munich-Logic-Lab).
 
 ---
-
-Feel free to integrate this README into your repository. Let me know if you need further assistance or modifications! 
