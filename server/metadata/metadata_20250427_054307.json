@@ -1,0 +1,24 @@
+{
+    "id": "20250427_054307",
+    "timestamp": "20250427_054307",
+    "prompt": "\nCreate a photorealistic image of an enchanting forest clearing with ancient oak trees\nand tall pines. The scene should have dappled sunlight filtering through the canopy,\ncreating golden rays that illuminate a small stream running through the center of the\nclearing. Include a carpet of vibrant green moss and ferns covering the forest floor,\ncolorful wildflowers, a few large moss-covered rocks, and some fallen logs. The time\nis late afternoon with a warm golden light giving the entire scene a magical quality.\n",
+    "status": "completed",
+    "expected_image_path": "images/generated_20250427_054307.png",
+    "expected_image_url": "http://localhost:5000/files/generated_20250427_054307.png",
+    "expected_ply_path": "plys/generated_20250427_054307.ply",
+    "expected_ply_url": "http://localhost:5000/files/generated_20250427_054307.ply",
+    "metadata_path": "metadata/metadata_20250427_054307.json",
+    "metadata_url": "http://localhost:5000/metadata/metadata_20250427_054307.json",
+    "image_status": "completed",
+    "image_path": "images/generated_20250427_054307.png",
+    "image_url": "http://localhost:5000/files/generated_20250427_054307.png",
+    "ply_status": "completed",
+    "ply_upload_status": "completed",
+    "ply_path": "plys/generated_20250427_054307.ply",
+    "ply_url": "http://localhost:5000/files/generated_20250427_054307.ply",
+    "storage": {
+        "provider": "local",
+        "url": "file:///home/francisco/Documents/Personal/Lucidia/server/storage/20250427_054412_5f68bb38_generated_20250427_054307.ply",
+        "local_url": "http://localhost:5000/files/20250427_054412_5f68bb38_generated_20250427_054307.ply"
+    }
+}
