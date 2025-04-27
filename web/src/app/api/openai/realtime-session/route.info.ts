@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 // define the expected response schema for the OpenAI realtime session
-const OpenAIRealtimeSessionResponse = z
+const OpenaiRealtimeSessionResponse = z
   .object({
     id: z.string(),
     url: z.string().url(),
@@ -22,7 +22,7 @@ const OpenAIRealtimeSessionResponse = z
   );
 
 export const Route = {
-  name: "ApiOpenAIRealtimeSession",
+  name: "ApiOpenaiRealtimeSession",
   params: z.object({}),
-  response: OpenAIRealtimeSessionResponse,
+  response: OpenaiRealtimeSessionResponse,
 };

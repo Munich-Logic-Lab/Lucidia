@@ -187,7 +187,7 @@ export function AppSidebar() {
                 className="flex w-full items-center justify-start gap-2"
               >
                 <Avatar className="h-6 w-6">
-                  <AvatarImage src="/images/77627641.jpg" alt="@its-Satyajit" />
+                  <AvatarImage src="/images/placeholder-dream2.png" />
                   <AvatarFallback>User</AvatarFallback>
                 </Avatar>
                 <span>{session.user.name}</span>

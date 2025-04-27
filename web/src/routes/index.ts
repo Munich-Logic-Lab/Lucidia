@@ -8,7 +8,7 @@ import * as AuthSignInRoute from "@/app/(auth)/sign-in/page.info";
 import * as AuthSignUpRoute from "@/app/(auth)/sign-up/page.info";
 import * as ApiAuthAllRoute from "@/app/api/auth/[...all]/route.info";
 import * as ApiOpenaiGenerateImagePromptRoute from "@/app/api/openai/generate-image-prompt/route.info";
-import * as ApiOpenAIRealtimeSessionRoute from "@/app/api/openai/realtime-session/route.info";
+import * as ApiOpenaiRealtimeSessionRoute from "@/app/api/openai/realtime-session/route.info";
 import * as ApiOpenaiGenerateImageRoute from "@/app/api/server/generate-image/route.info";
 import * as HomeRoute from "@/app/page.info";
 
@@ -53,11 +53,11 @@ export const ApiOpenaiGenerateImagePrompt = makeRoute(
     ...ApiOpenaiGenerateImagePromptRoute.Route,
   },
 );
-export const ApiOpenAIRealtimeSession = makeRoute(
+export const ApiOpenaiRealtimeSession = makeRoute(
   "/api/openai/realtime-session",
   {
     ...defaultInfo,
-    ...ApiOpenAIRealtimeSessionRoute.Route,
+    ...ApiOpenaiRealtimeSessionRoute.Route,
   },
 );
 export const ApiOpenaiGenerateImage = makeRoute("/api/server/generate-image", {
