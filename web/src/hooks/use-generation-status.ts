@@ -12,10 +12,13 @@ export interface GenerationMetadata {
   ply_status?: string;
   ply_url?: string;
   ply_path?: string;
+  error?: string;
   storage?: {
     provider: string;
     url: string;
+    [key: string]: unknown;
   };
+  [key: string]: unknown;
 }
 
 interface UseGenerationStatusOptions {
@@ -95,7 +98,9 @@ export function useGenerationStatus({
         throw new Error(`Generation failed: ${data.error || "Unknown error"}`);
       } else {
         // Continue polling
-        pollingTimeoutRef.current = setTimeout(checkMetadata, pollingInterval);
+        pollingTimeoutRef.current = setTimeout(() => {
+          void checkMetadata();
+        }, pollingInterval);
       }
     } catch (err) {
       const error = err instanceof Error ? err : new Error(String(err));
@@ -127,7 +132,7 @@ export function useGenerationStatus({
       // Use setTimeout with 0 delay to avoid potential infinite update loops
       // This ensures the checkMetadata call is made in the next event loop tick
       const initialPoll = setTimeout(() => {
-        checkMetadata();
+        void checkMetadata();
       }, 0);
 
       return () => {

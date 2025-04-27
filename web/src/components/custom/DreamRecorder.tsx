@@ -2,8 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { DownloadIcon } from "lucide-react";
+import { DownloadIcon, EyeIcon } from "lucide-react";
 
+import { ThreePlyViewer } from "@/components/custom/ThreePlyViewer";
 import { RIcon, RecordbuttonIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -42,6 +43,7 @@ export function DreamRecorder() {
   const [plyUrl, setPlyUrl] = useState<string | undefined>(undefined);
   const [plyGenerationStatus, setPlyGenerationStatus] = useState("");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
 
   // Memoize the callback handlers to avoid recreating them on every render
   // Custom debug log function that both logs to console and stores for UI
@@ -265,7 +267,7 @@ export function DreamRecorder() {
         // Call our API endpoint that will use the Lucidia server
         debugLog("Calling Lucidia server for image and 3D generation");
 
-        const response = await fetch("/api/openai/generate-image", {
+        const response = await fetch("/api/server/generate-image", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -400,6 +402,14 @@ export function DreamRecorder() {
     }
   }, [plyUrl, debugLog]);
 
+  const handleOpenViewer = useCallback(() => {
+    if (plyUrl) {
+      debugLog("Opening 3D viewer", { plyUrl });
+      // Simply open the viewer - the component itself will handle cleanup
+      setIsViewerOpen(true);
+    }
+  }, [plyUrl, debugLog]);
+
   const handleMicrophoneToggle = async () => {
     if (!isConnected) {
       try {
@@ -481,6 +491,19 @@ export function DreamRecorder() {
 
   return (
     <div className="flex h-full flex-col">
+      {/* Only render the viewer component when it's open, and use a key to ensure it's a fresh instance */}
+      {isViewerOpen && plyUrl && (
+        <ThreePlyViewer
+          key={`viewer-${plyUrl}`}
+          filePath={plyUrl}
+          isOpen={isViewerOpen}
+          onClose={() => {
+            debugLog("Closing 3D viewer");
+            setIsViewerOpen(false);
+          }}
+        />
+      )}
+
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center">
           <RIcon className="h-6 w-6 translate-y-[-4px]" />
@@ -602,15 +625,26 @@ export function DreamRecorder() {
           <h3 className="mb-1 text-sm font-medium text-green-700">
             3D Model Ready
           </h3>
-          <Button
-            variant="outline"
-            size="sm"
-            className="mt-2 flex items-center gap-2"
-            onClick={handleDownloadPly}
-          >
-            <DownloadIcon className="h-4 w-4" />
-            Download 3D Model (.ply)
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="mt-2 flex items-center gap-2"
+              onClick={handleDownloadPly}
+            >
+              <DownloadIcon className="h-4 w-4" />
+              Download 3D Model
+            </Button>
+            <Button
+              variant="default"
+              size="sm"
+              className="mt-2 flex items-center gap-2 bg-purple-600 hover:bg-purple-700"
+              onClick={handleOpenViewer}
+            >
+              <EyeIcon className="h-4 w-4" />
+              View in 3D
+            </Button>
+          </div>
         </div>
       )}
 
@@ -689,7 +723,7 @@ export function DreamRecorder() {
                 onClick={() => {
                   debugLog(
                     "Generation metadata:",
-                    metadata || "No metadata available",
+                    metadata ? metadata : { message: "No metadata available" },
                   );
                 }}
                 className="rounded bg-gray-200 px-2 py-1 text-xs hover:bg-gray-300"

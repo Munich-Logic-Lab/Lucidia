@@ -4,6 +4,7 @@ import json
 from openai import OpenAI
 from datetime import datetime
 from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS
 import requests
 from io import BytesIO
 from PIL import Image
@@ -16,6 +17,8 @@ from vercel_api import upload_to_vercel_blob
 load_dotenv()
 
 app = Flask(__name__)
+# Enable CORS for all routes
+CORS(app)
 
 # Initialize OpenAI client
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
@@ -116,7 +119,7 @@ def process_generation(prompt, timestamp, image_path, ply_path, metadata_path):
     """
     try:
         # Get server URL for file URLs
-        server_url = f"http://localhost:5000"  # Default fallback
+        server_url = "http://localhost:5000"  # Default fallback
         
         # Update metadata to indicate image generation started
         try:
@@ -240,7 +243,7 @@ def process_generation(prompt, timestamp, image_path, ply_path, metadata_path):
                         store_id="store_vO7lSadIHJFbCUIv",
                         token=VERCEL_BLOB_TOKEN
                     )
-                    print(f"Successfully uploaded PLY to Vercel Blob using API token")
+                    print("Successfully uploaded PLY to Vercel Blob using API token")
                 except Exception as e:
                     print(f"Error uploading to Vercel Blob API: {str(e)}")
                     # Fall back to alternative storage methods
