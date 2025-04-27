@@ -1,11 +1,7 @@
 import { NextResponse } from "next/server";
 
-import OpenAI from "openai";
-
-// Create an OpenAI client instance
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Define the server URL
+const SERVER_URL = process.env.LUCIDIA_SERVER_URL || "http://localhost:5000";
 
 export const POST = async (req: Request) => {
   try {
@@ -19,29 +15,37 @@ export const POST = async (req: Request) => {
       );
     }
 
-    // Call the OpenAI API to generate an image
-    console.log("Generating image with prompt:", prompt);
-    console.log(
-      "Using OpenAI API key:",
-      process.env.OPENAI_API_KEY ? "Key is set" : "Key is missing",
-    );
+    console.log("Sending prompt to Lucidia server:", prompt);
 
-    const response = await openai.images.generate({
-      model: "dall-e-3", // Fall back to DALL-E 3 which is more widely available
-      prompt: prompt,
-      n: 1,
-      size: "1024x1024", // Standard size
-      quality: "standard",
+    // Call the Lucidia server API to generate the image and PLY
+    const response = await fetch(`${SERVER_URL}/generate-image`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt }),
     });
 
-    // Extract the generated image URL from the response
-    const imageUrl = response.data?.[0]?.url;
-
-    if (!imageUrl) {
-      throw new Error("No image URL returned from OpenAI");
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Server returned ${response.status}: ${errorText}`);
     }
 
-    return NextResponse.json({ imageUrl });
+    const data = await response.json();
+
+    if (!data.metadata_url) {
+      throw new Error("No metadata URL returned from server");
+    }
+
+    // Return the metadata information from the server
+    return NextResponse.json({
+      success: true,
+      id: data.id,
+      metadataUrl: data.metadata_url,
+      expectedImageUrl: data.expected_image_url,
+      expectedPlyUrl: data.expected_ply_url,
+      status: data.status,
+    });
   } catch (error) {
     console.error("Error generating image:", error);
 

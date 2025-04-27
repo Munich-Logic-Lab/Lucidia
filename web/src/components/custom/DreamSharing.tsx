@@ -15,6 +15,8 @@ export function DreamSharing() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [dreamViz, setDreamViz] = useState<string | null>();
+  const [plyModelUrl, setPlyModelUrl] = useState<string | null>();
+  const [plyStatus, setPlyStatus] = useState<string>("");
 
   const handleGenerateVideo = async () => {
     // In a real implementation, this would call an API to generate a video
@@ -28,7 +30,7 @@ export function DreamSharing() {
     }, 3000);
   };
 
-  // Listen for dream image generation events
+  // Listen for dream image and 3D model generation events
   useEffect(() => {
     const handleDreamImageGenerated = (event: CustomEvent) => {
       const { imageUrl } = event.detail;
@@ -40,6 +42,8 @@ export function DreamSharing() {
 
     const handleImageGenerationStart = () => {
       setIsGenerating(true);
+      setPlyModelUrl(undefined);
+      setPlyStatus("");
     };
 
     const handleImageGenerationEnd = () => {
@@ -49,7 +53,18 @@ export function DreamSharing() {
     const handleImageReset = () => {
       // Reset the image when starting a new session
       setDreamViz(undefined);
+      setPlyModelUrl(undefined);
+      setPlyStatus("");
       setIsGenerating(false);
+    };
+
+    // Custom event for PLY model completion
+    const handlePlyModelCompleted = (event: CustomEvent) => {
+      const { plyUrl } = event.detail;
+      if (plyUrl) {
+        setPlyModelUrl(plyUrl);
+        setPlyStatus("completed");
+      }
     };
 
     // Add event listeners
@@ -73,6 +88,11 @@ export function DreamSharing() {
       handleImageReset as EventListener,
     );
 
+    window.addEventListener(
+      "dreamPlyModelCompleted",
+      handlePlyModelCompleted as EventListener,
+    );
+
     // Clean up
     return () => {
       window.removeEventListener(
@@ -93,6 +113,11 @@ export function DreamSharing() {
       window.removeEventListener(
         "dreamImageReset",
         handleImageReset as EventListener,
+      );
+
+      window.removeEventListener(
+        "dreamPlyModelCompleted",
+        handlePlyModelCompleted as EventListener,
       );
     };
   }, []);
@@ -125,10 +150,116 @@ export function DreamSharing() {
 
             {isGenerating && (
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <div className="h-16 w-16 animate-spin rounded-full border-4 border-purple-500 border-t-transparent"></div>
-                <p className="mt-4 text-center text-lg font-medium text-white">
-                  Generating your dream image...
-                </p>
+                <div className="rounded-xl bg-black/50 p-6 text-center">
+                  <div className="mx-auto mb-4 h-16 w-16 animate-spin rounded-full border-4 border-purple-500 border-t-transparent"></div>
+                  <p className="text-lg font-medium text-white">
+                    Generating dream visualizations...
+                  </p>
+                  <p className="mt-2 text-sm text-white/80">
+                    Creating an image and 3D model from your dream description.
+                    <br />
+                    This may take a minute or two.
+                  </p>
+
+                  <div className="mx-auto mt-4 max-w-xs">
+                    <div className="mb-2 flex justify-between text-xs text-white/80">
+                      <span>Image processing:</span>
+                      <span>{dreamViz ? "Complete" : "In progress..."}</span>
+                    </div>
+                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/20">
+                      <div
+                        className="h-full rounded-full bg-purple-500"
+                        style={{
+                          width: dreamViz ? "100%" : "60%",
+                          transition: "width 1s ease-in-out",
+                        }}
+                      ></div>
+                    </div>
+
+                    <div className="mt-3 mb-2 flex justify-between text-xs text-white/80">
+                      <span>3D model processing:</span>
+                      <span>
+                        {plyStatus === "completed"
+                          ? "Complete"
+                          : "In progress..."}
+                      </span>
+                    </div>
+                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/20">
+                      <div
+                        className="h-full rounded-full bg-purple-500"
+                        style={{
+                          width:
+                            plyStatus === "completed"
+                              ? "100%"
+                              : dreamViz
+                                ? "50%"
+                                : "20%",
+                          transition: "width 1s ease-in-out",
+                        }}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 3D Model Status - Shows loading or download button */}
+            {dreamViz && (
+              <div className="absolute right-4 bottom-4">
+                {plyModelUrl && plyStatus === "completed" ? (
+                  <Button
+                    variant="default"
+                    size="sm"
+                    className="animate-pulse-slow flex items-center gap-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white shadow-lg transition-all duration-300 hover:from-purple-600 hover:to-indigo-700"
+                    onClick={() => window.open(plyModelUrl, "_blank")}
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      className="h-5 w-5"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12 2L4 6v12l8 4 8-4V6l-8-4z"
+                        fill="white"
+                        fillOpacity="0.2"
+                      />
+                      <path
+                        d="M12 22V10M4 6l8-4 8 4M4 18l8 4 8-4"
+                        stroke="white"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M4 12l8 4 8-4"
+                        stroke="white"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    Download 3D Model (.ply)
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex cursor-not-allowed items-center gap-2 bg-white/80 text-black opacity-90 shadow-md"
+                    disabled
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="h-4 w-4 animate-pulse text-purple-600"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M12 2L4 6v12l8 4 8-4V6l-8-4zm0 4L8 8v2l4-2 4 2V8l-4-2z"
+                      />
+                    </svg>
+                    Creating 3D Model...
+                  </Button>
+                )}
               </div>
             )}
 
@@ -138,17 +269,17 @@ export function DreamSharing() {
                   Start talking about your dream
                 </p>
                 <p className="mt-2 text-center">
-                  We'll create an image based on the scene you describe
+                  We'll create an image and 3D model based on the scene you
+                  describe
                 </p>
                 <div className="mt-6 max-w-md rounded-lg bg-black/40 p-4">
                   <h3 className="mb-2 text-lg font-medium">How it works:</h3>
                   <ol className="list-decimal space-y-2 pl-5">
                     <li>Click the record button and describe your dream</li>
                     <li>Answer a few questions about visual details</li>
-                    <li>
-                      The AI will create a text prompt for image generation
-                    </li>
+                    <li>The AI will create a text prompt for visualization</li>
                     <li>An image of your dream scene will appear here</li>
+                    <li>A 3D model will be generated for download</li>
                   </ol>
                 </div>
               </div>

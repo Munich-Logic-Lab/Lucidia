@@ -196,6 +196,23 @@
   body {
     font-family: "Helvetica Neue", sans-serif;
   }
+  
+  /* Custom animations */
+  @keyframes pulse-slow {
+    0% {
+      box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(139, 92, 246, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
+    }
+  }
+
+  .animate-pulse-slow {
+    animation: pulse-slow 3s infinite;
+  }
 }
 
 @layer base {

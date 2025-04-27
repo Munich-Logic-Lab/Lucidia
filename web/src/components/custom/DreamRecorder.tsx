@@ -2,11 +2,17 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { DownloadIcon } from "lucide-react";
+
 import { RIcon, RecordbuttonIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
 import { useDreamRealtime } from "@/hooks/use-dream-realtime";
+import {
+  GenerationMetadata,
+  useGenerationStatus,
+} from "@/hooks/use-generation-status";
 
 // Updated instructions to no longer ask for the hidden image prompt
 const REALTIME_INSTRUCTIONS =
@@ -30,6 +36,14 @@ export function DreamRecorder() {
   const [shouldGenerateImagePrompt, setShouldGenerateImagePrompt] =
     useState(false);
 
+  // Added for 3D model generation
+  const [metadataUrl, setMetadataUrl] = useState<string | undefined>(undefined);
+  const [isGenerating3D, setIsGenerating3D] = useState(false);
+  const [plyUrl, setPlyUrl] = useState<string | undefined>(undefined);
+  const [plyGenerationStatus, setPlyGenerationStatus] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  // Memoize the callback handlers to avoid recreating them on every render
   // Custom debug log function that both logs to console and stores for UI
   const debugLog = useCallback(
     (message: string, data?: Record<string, unknown>) => {
@@ -38,8 +52,93 @@ export function DreamRecorder() {
       console.log(logMsg, data);
       setDebugLogs((prev) => [...prev.slice(-9), logMsg]); // Keep last 10 logs
     },
-    [],
+    [setDebugLogs],
   );
+
+  const handleImageComplete = useCallback(
+    (imageUrl: string) => {
+      debugLog("Image completed according to metadata", { imageUrl });
+      setGeneratedImageUrl(imageUrl);
+
+      // Notify parent component about the generated image
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(
+          new CustomEvent("dreamImageGenerated", {
+            detail: { imageUrl },
+          }),
+        );
+      }
+    },
+    [debugLog, setGeneratedImageUrl],
+  );
+
+  const handlePlyComplete = useCallback(
+    (plyUrl: string) => {
+      debugLog("PLY file completed", { plyUrl });
+      setPlyUrl(plyUrl);
+      setPlyGenerationStatus("completed");
+
+      // Notify parent component about the completed PLY model
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(
+          new CustomEvent("dreamPlyModelCompleted", {
+            detail: { plyUrl },
+          }),
+        );
+      }
+    },
+    [debugLog, setPlyUrl, setPlyGenerationStatus],
+  );
+
+  const handleGenerationComplete = useCallback(
+    (completedMetadata: GenerationMetadata) => {
+      debugLog("Generation completed", { metadata: completedMetadata });
+      setIsGenerating3D(false);
+      setIsGeneratingImage(false);
+
+      // Notify parent that generation has ended
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("dreamImageGenerationEnd"));
+      }
+    },
+    [debugLog, setIsGenerating3D, setIsGeneratingImage],
+  );
+
+  const handleGenerationError = useCallback(
+    (error: Error) => {
+      debugLog("Generation error", { error: error.message });
+      setErrorMessage(error.message);
+      setIsGenerating3D(false);
+      setIsGeneratingImage(false);
+
+      // Notify parent that generation has ended with error
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("dreamImageGenerationEnd"));
+      }
+    },
+    [debugLog, setErrorMessage, setIsGenerating3D, setIsGeneratingImage],
+  );
+
+  // Use our generation status hook to monitor the 3D model creation
+  const { metadata, isPolling } = useGenerationStatus({
+    metadataUrl,
+    onImageComplete: handleImageComplete,
+    onPlyComplete: handlePlyComplete,
+    onComplete: handleGenerationComplete,
+    onError: handleGenerationError,
+  });
+
+  // Update PLY status when metadata changes
+  useEffect(() => {
+    if (metadata) {
+      if (metadata.ply_status) {
+        // Only update if the status has changed to avoid unnecessary renders
+        if (plyGenerationStatus !== metadata.ply_status) {
+          setPlyGenerationStatus(metadata.ply_status);
+        }
+      }
+    }
+  }, [metadata, plyGenerationStatus]);
 
   // Use our custom hook for WebRTC integration
   const {
@@ -148,17 +247,24 @@ export function DreamRecorder() {
         if (isGeneratingImage) return;
 
         setIsGeneratingImage(true);
-        debugLog("Starting image generation", { promptLength: prompt.length });
+        setIsGenerating3D(true);
+        setPlyGenerationStatus("pending");
+        setMetadataUrl(undefined);
+        setPlyUrl(undefined);
+        setErrorMessage("");
+
+        debugLog("Starting image and 3D generation", {
+          promptLength: prompt.length,
+        });
 
         // Notify parent that image generation has started
         if (typeof window !== "undefined") {
           window.dispatchEvent(new CustomEvent("dreamImageGenerationStart"));
         }
 
-        // Use the OpenAI GPT image generation API
-        debugLog("Calling OpenAI image generation API with gpt-image-1 model");
+        // Call our API endpoint that will use the Lucidia server
+        debugLog("Calling Lucidia server for image and 3D generation");
 
-        // Call our API endpoint that will use OpenAI's image generation
         const response = await fetch("/api/openai/generate-image", {
           method: "POST",
           headers: {
@@ -169,46 +275,42 @@ export function DreamRecorder() {
 
         if (!response.ok) {
           throw new Error(
-            `Failed to generate image: ${response.status} ${response.statusText}`,
+            `Failed to start generation: ${response.status} ${response.statusText}`,
           );
         }
 
-        // Get the URL of the generated image
-        const data = (await response.json()) as { imageUrl?: string };
+        // Get the metadata URL from the response
+        const data = await response.json();
 
-        if (!data?.imageUrl) {
-          throw new Error("No image URL returned from API");
+        if (!data.metadataUrl) {
+          throw new Error("No metadata URL returned from API");
         }
 
-        const imageUrl = data.imageUrl;
+        debugLog("Generation request successful", {
+          id: data.id,
+          metadataUrl: data.metadataUrl,
+          expectedImageUrl: data.expectedImageUrl,
+          expectedPlyUrl: data.expectedPlyUrl,
+        });
 
-        debugLog("Image generation successful", { imageUrl });
-        setGeneratedImageUrl(imageUrl);
-
-        // Notify parent component about the generated image
-        if (typeof window !== "undefined") {
-          window.dispatchEvent(
-            new CustomEvent("dreamImageGenerated", {
-              detail: { imageUrl },
-            }),
-          );
-        }
+        // Store metadata URL to start polling
+        setMetadataUrl(data.metadataUrl);
       } catch (error) {
-        debugLog("Image generation error", {
+        debugLog("Generation request error", {
           error: error instanceof Error ? error.message : String(error),
         });
-        console.error("Image generation error:", error);
-      } finally {
+        console.error("Generation error:", error);
         setIsGeneratingImage(false);
-        setIsProcessing(false);
+        setIsGenerating3D(false);
+        setErrorMessage(error instanceof Error ? error.message : String(error));
 
-        // Notify parent that image generation has ended
+        // Notify parent that image generation has ended with error
         if (typeof window !== "undefined") {
           window.dispatchEvent(new CustomEvent("dreamImageGenerationEnd"));
         }
       }
     },
-    [debugLog],
+    [debugLog, isGeneratingImage],
   );
 
   // Effect to handle image prompt generation after conversation ends
@@ -288,9 +390,15 @@ export function DreamRecorder() {
     completeConversation,
     generateImage,
     debugLog,
+    isProcessing,
   ]);
 
-  /* The generateImage function is defined earlier in the file */
+  const handleDownloadPly = useCallback(() => {
+    if (plyUrl) {
+      debugLog("Downloading PLY file", { plyUrl });
+      window.open(plyUrl, "_blank");
+    }
+  }, [plyUrl, debugLog]);
 
   const handleMicrophoneToggle = async () => {
     if (!isConnected) {
@@ -303,6 +411,10 @@ export function DreamRecorder() {
         setIsProcessing(true);
         setCompleteConversation(""); // Reset conversation history
         setShouldGenerateImagePrompt(false);
+        setPlyUrl(undefined);
+        setMetadataUrl(undefined);
+        setPlyGenerationStatus("");
+        setErrorMessage("");
 
         // Notify parent component to reset the image display
         if (typeof window !== "undefined") {
@@ -408,15 +520,97 @@ export function DreamRecorder() {
         </div>
       )}
 
+      {/* Generation Status Panel */}
       {isGeneratingImage && (
         <div className="mb-4 rounded-md bg-blue-50 p-3">
           <h3 className="mb-1 flex items-center gap-2 text-sm font-medium text-blue-700">
-            Creating Dream Image
+            Creating Dream Visualizations
             <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent"></span>
           </h3>
           <p className="text-sm">
-            Converting your dream description into an image...
+            Converting your dream description into visualizations...
           </p>
+          <div className="mt-3 space-y-2">
+            <div className="flex items-center justify-between text-xs">
+              <span>Image:</span>
+              <span className="flex items-center">
+                {generatedImageUrl ? (
+                  <span className="flex items-center text-green-600">
+                    <svg
+                      className="mr-1 h-4 w-4"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    Complete
+                  </span>
+                ) : (
+                  <span className="flex items-center">
+                    <span className="mr-1 inline-block h-3 w-3 animate-spin rounded-full border-2 border-blue-600 border-t-transparent"></span>
+                    Processing
+                  </span>
+                )}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between text-xs">
+              <span>3D Model:</span>
+              <span className="flex items-center">
+                {plyGenerationStatus === "completed" ? (
+                  <span className="flex items-center text-green-600">
+                    <svg
+                      className="mr-1 h-4 w-4"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    Complete
+                  </span>
+                ) : (
+                  <span className="flex items-center">
+                    <span className="mr-1 inline-block h-3 w-3 animate-spin rounded-full border-2 border-blue-600 border-t-transparent"></span>
+                    Processing
+                  </span>
+                )}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Error message */}
+      {errorMessage && (
+        <div className="mb-4 rounded-md bg-red-50 p-3">
+          <h3 className="mb-1 text-sm font-medium text-red-700">Error</h3>
+          <p className="text-sm text-red-600">{errorMessage}</p>
+        </div>
+      )}
+
+      {/* PLY Download Option */}
+      {plyUrl && (
+        <div className="mb-4 rounded-md bg-green-50 p-3">
+          <h3 className="mb-1 text-sm font-medium text-green-700">
+            3D Model Ready
+          </h3>
+          <Button
+            variant="outline"
+            size="sm"
+            className="mt-2 flex items-center gap-2"
+            onClick={handleDownloadPly}
+          >
+            <DownloadIcon className="h-4 w-4" />
+            Download 3D Model (.ply)
+          </Button>
         </div>
       )}
 
@@ -477,7 +671,7 @@ export function DreamRecorder() {
                 ))}
               </ul>
             )}
-            <div className="mt-2 flex justify-end">
+            <div className="mt-2 flex justify-end space-x-2">
               <button
                 onClick={() => {
                   debugLog("Requesting AI message content...");
@@ -490,6 +684,17 @@ export function DreamRecorder() {
                 className="rounded bg-gray-200 px-2 py-1 text-xs hover:bg-gray-300"
               >
                 Debug AI Message
+              </button>
+              <button
+                onClick={() => {
+                  debugLog(
+                    "Generation metadata:",
+                    metadata || "No metadata available",
+                  );
+                }}
+                className="rounded bg-gray-200 px-2 py-1 text-xs hover:bg-gray-300"
+              >
+                Debug Metadata
               </button>
             </div>
           </div>
