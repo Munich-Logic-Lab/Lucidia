@@ -506,7 +506,7 @@ export function DreamRecorder() {
 
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center">
-          <RIcon className="h-6 w-6 translate-y-[-4px]" />
+          <RIcon className="h-6 w-6 translate-y-[4px]" />
           <h2 className="translate-x-[-4px] text-[18px] leading-[22px] font-normal tracking-[0.72px]">
             ecord your dream
           </h2>
