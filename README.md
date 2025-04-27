@@ -1,56 +1,51 @@
 # Lucidia
 
-Lucidia is an expressive journaling and visualization platform that transforms voice-recorded dreams into immersive 3D scenes. Designed for children with communication challenges, adults exploring their subconscious, and researchers lacking labeled visual dream datasets, Lucidia bridges the gap between imagination and visualization.
+Lucidia is an expressive journaling and visualization platform that transforms voice-recorded dreams into immersive 3D scenes. Using advanced AI, it converts spoken dream narratives into both 2D images and interactive 3D visualizations, creating a bridge between imagination and visual experience.
 
----
+## Key Features
 
-## ✨ Features
+- **Voice-to-Visualization Pipeline**: Records spoken dream descriptions and processes them into visual representations
+- **Real-time Dream Processing**: Utilizes OpenAI's real-time API for natural conversation about dreams
+- **AI-Powered Image Generation**: Creates artistic representations of dream scenes using DALL·E
+- **3D Scene Rendering**: Transforms 2D images into interactive 3D models using Gaussian splatting
+- **Intuitive User Interface**: Offers a streamlined experience for recording, reviewing, and exploring dreams
+- **User Authentication**: Secure account management with email and social login options
 
-- **Voice-to-Visualization Pipeline**: Utilizes OpenAI's Whisper for transcription and DALL·E for image generation based on dream narratives.
-- **3D Scene Rendering**: Employs Three.js to render Gaussian splatting visualizations from generated `.ply` files.
-- **Interactive Journaling**: Provides a user-friendly interface for recording, reviewing, and visualizing dreams.
-- **Research Utility**: Offers a novel approach for collecting and analyzing dream data, beneficial for psychological and neuroscientific studies.
+## How It Works
 
----
+1. **Dream Recording**: Users describe their dreams through voice or text
+2. **AI-Guided Conversation**: The system asks followup questions to gather visual details
+3. **Prompt Generation**: AI creates an optimized image prompt based on the dream description
+4. **Image Creation**: The system generates a representative image from the prompt
+5. **3D Model Generation**: The image is processed into a 3D point cloud (.ply file)
+6. **Visualization**: Three.js renders an interactive 3D scene viewable in the browser
 
-## 🧠 How It Works
+## Tech Stack
 
-1. **Dream Recording**: Users narrate their dreams through the platform.
-2. **Transcription**: OpenAI's Whisper transcribes the audio into text.
-3. **Image Generation**: The transcribed text serves as a prompt for OpenAI's DALL·E to generate a representative image.
-4. **3D Model Creation**: The generated image, along with the original prompt (used as a hallucination prompt), is processed to create a `.ply` file representing a 3D point cloud.
-5. **Visualization**: Three.js renders the `.ply` file using Gaussian splatting techniques, providing an immersive visual representation of the dream.
+- **Frontend**: Next.js 15 with React 19, Tailwind CSS, shadcn/ui components
+- **Backend**: Flask server for AI model orchestration and 3D processing
+- **3D Rendering**: Three.js with Gaussian splatting for immersive visualizations
+- **AI Integration**: OpenAI API for real-time conversation, image generation, and audio processing
+- **Cloud Storage**: Vercel Blob Storage for securely storing generated assets
+- **Authentication**: Custom auth system with social login options
 
----
-
-## 🛠️ Tech Stack
-
-- **Frontend**: [Next.js](https://nextjs.org/) for server-side rendering and React-based UI.
-- **Backend**: [Flask](https://flask.palletsprojects.com/) for API endpoints and server logic.
-- **3D Rendering**: [Three.js](https://threejs.org/) for rendering 3D visualizations.
-- **AI Services**: [OpenAI Whisper](https://openai.com/research/whisper) for transcription and [OpenAI DALL·E](https://openai.com/dall-e) for image generation.
-
----
-
-## 📦 Repository Structure
+## Repository Structure
 
 ```
-
 Lucidia/
-├── server/             # Flask backend for handling API requests
+├── server/             # Flask backend for AI processing and 3D generation
 ├── web/                # Next.js frontend application
 └── README.md           # Project documentation
 ```
 
----
-
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
+- Node.js (v16 or higher)
 - Python 3.8+
 - OpenAI API key
+- Vercel Blob Storage tokens (optional, for production)
 
 ### Installation
 
@@ -62,21 +57,22 @@ Lucidia/
    ```
 
 2. **Set Up Backend**:
-
    ```bash
    cd server
    python3 -m venv venv
    source venv/bin/activate
    pip install -r requirements.txt
    ```
-
 3. **Configure Environment Variables**:
+   Create a `.env` file in the `server/` directory with your API keys:
 
-   Create a `.env` file in the `server/` directory with your OpenAI API key:
-
-   ```env
-   OPENAI_API_KEY=your_openai_api_key
    ```
+   OPENAI_API_KEY=your_openai_api_key
+   HF_TOKEN=your_huggingface_token
+   BLOB_READ_WRITE_TOKEN=your_vercel_blob_token
+   ```
+
+   For the `web/` nextjs project look into the respective `.env.example` file.
 
 4. **Run Backend Server**:
 
@@ -88,30 +84,9 @@ Lucidia/
 
    ```bash
    cd ../web
-   npm install
-   npm run dev
+   pnpm install
+   pnpm dev
    ```
 
 6. **Access the Application**:
-
    Open your browser and navigate to `http://localhost:3000`.
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
----
-
-## 🤝 Contributing
-
-We welcome contributions from the community. If you're interested in contributing, please fork the repository and submit a pull request. For major changes, open an issue first to discuss what you'd like to change.
-
----
-
-## 📫 Contact
-
-For questions or collaborations, please reach out to the [Munich Logic Lab](https://github.com/Munich-Logic-Lab).
-
----
