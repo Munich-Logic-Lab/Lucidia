@@ -50,6 +50,9 @@ importers:
       '@tanstack/react-query-devtools':
         specifier: ^5.69.0
         version: 5.74.6(@tanstack/react-query@5.74.4(react@19.1.0))(react@19.1.0)
+      '@types/webrtc':
+        specifier: ^0.0.46
+        version: 0.0.46
       babel-plugin-react-compiler:
         specifier: beta
         version: 19.0.0-beta-af1b7da-20250417
@@ -111,7 +114,7 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1
       sonner:
-        specifier: ^2.0.1
+        specifier: ^2.0.3
         version: 2.0.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       tailwind-merge:
         specifier: ^3.0.2
@@ -123,7 +126,7 @@ importers:
         specifier: ^3.17.0
         version: 3.17.0
       zod:
-        specifier: ^3.24.2
+        specifier: ^3.24.3
         version: 3.24.3
     devDependencies:
       '@eslint/eslintrc':
@@ -1440,7 +1443,6 @@ packages:
   '@tailwindcss/oxide-darwin-arm64@4.1.4':
     resolution: {integrity: sha512-JGRj0SYFuDuAGilWFBlshcexev2hOKfNkoX+0QTksKYq2zgF9VY/vVMq9m8IObYnLna0Xlg+ytCi2FN2rOL0Sg==}
     engines: {node: '>= 10'}
-    cpu: [arm64]
     os: [darwin]
 
   '@tailwindcss/oxide-darwin-x64@4.1.4':
@@ -1587,6 +1589,9 @@ packages:
 
   '@types/triple-beam@1.3.5':
     resolution: {integrity: sha512-6WaYesThRMCl19iryMYP7/x2OVgCtbIVflDGFpWnb9irXI3UjYE4AzmYuiUKY1AJstGijoY+MgUszMgRxIYTYw==}
+
+  '@types/webrtc@0.0.46':
+    resolution: {integrity: sha512-cvCnjKy0ma9ODWbVYBTMMB+WkocwLcscCwn2/caDVdb9MWaesS8PYGapIIHFsAaIBXRFlH1Fc7ZjIBO6pH0HKA==}
 
   '@typescript-eslint/eslint-plugin@8.31.0':
     resolution: {integrity: sha512-evaQJZ/J/S4wisevDvC1KFZkPzRetH8kYZbkgcTRyql3mcKsf+ZFDV1BVWUGTCAW5pQHoqn5gK5b8kn7ou9aFQ==}
@@ -2790,7 +2795,6 @@ packages:
   lightningcss-darwin-arm64@1.29.3:
     resolution: {integrity: sha512-fb7raKO3pXtlNbQbiMeEu8RbBVHnpyqAoxTyTRMEWFQWmscGC2wZxoHzZ+YKAepUuKT9uIW5vL2QbFivTgprZg==}
     engines: {node: '>= 12.0.0'}
-    cpu: [arm64]
     os: [darwin]
 
   lightningcss-darwin-x64@1.29.2:
@@ -4875,6 +4879,8 @@ snapshots:
       csstype: 3.1.3
 
   '@types/triple-beam@1.3.5': {}
+
+  '@types/webrtc@0.0.46': {}
 
   '@typescript-eslint/eslint-plugin@8.31.0(@typescript-eslint/parser@8.31.0(eslint@9.25.1(jiti@2.4.2))(typescript@5.8.3))(eslint@9.25.1(jiti@2.4.2))(typescript@5.8.3)':
     dependencies:

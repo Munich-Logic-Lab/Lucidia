@@ -3,6 +3,7 @@
 import React from "react";
 
 import { DreamSharing } from "@/components/custom/DreamSharing";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
           {/* Dream sharing section */}
           <DreamSharing />
         </main>
+        <Toaster />
       </div>
     </div>
   );

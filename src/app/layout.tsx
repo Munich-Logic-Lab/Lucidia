@@ -6,7 +6,6 @@ import "@/styles";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { AppSidebar } from "@/components/custom/AppSidebar";
-import { DreamSidebar } from "@/components/custom/DreamSidebar";
 import ReactQueryProvider from "@/components/providers/ReactQuery";
 import Footer from "@/components/section/Footer";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -37,7 +36,6 @@ export default async function RootLayout({
                 <main className="w-3/4 flex-grow">
                   <div className="prose-base w-full">{children}</div>
                 </main>
-                <DreamSidebar />
               </div>
               <Footer />
             </div>
