@@ -14,7 +14,7 @@ import { DreamRecorder } from "./DreamRecorder";
 export function DreamSharing() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [dreamViz, setDreamViz] = useState("/images/77627641.jpg"); // Default image
+  const [dreamViz, setDreamViz] = useState<string | null>();
 
   const handleGenerateVideo = async () => {
     // In a real implementation, this would call an API to generate a video
@@ -46,14 +46,24 @@ export function DreamSharing() {
           </div>
           <DreamAvatarGroup />
 
-          <div className="relative mt-4 h-full">
+          <div className="relative h-full">
             <Image
-              src={dreamViz}
+              src={dreamViz || "/images/placeholder-dream.png"}
               alt="Dream visualization"
-              width={1200}
-              height={800}
-              className="h-[600px] w-full rounded-md object-cover"
+              fill={true}
+              className="rounded-md object-cover"
             />
+            {!dreamViz && (
+              <div className="absolute inset-0 mt-12 flex flex-col items-center justify-center text-white">
+                <p className="text-center text-xl font-medium">
+                  Start talking about your dream
+                </p>
+                <p className="mt-2 text-center">
+                  We'll visualize it for you after you share your experience
+                </p>
+              </div>
+            )}
+            {/*
             <div className="absolute right-0 bottom-4 left-0 flex justify-center gap-4">
               <Button
                 onClick={handlePlayPause}
@@ -90,6 +100,7 @@ export function DreamSharing() {
                 )}
               </Button>
             </div>
+            */}
           </div>
         </div>
       </div>
